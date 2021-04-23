@@ -2,13 +2,16 @@
   become: true
   become_user: root
   tasks:
-  - name: install httpd
-    yum: name=httpd state=present
-  - name: start httpd
-    service: name=httpd state=started
-  - name: deploy html file
-    copy: src=/etc/ansible/index.html dest=/var/www/html
-    notify: restart httpd
+  - name: install tomcat
+    yum: name=tomcat state=present
+  - name: start tomcat
+    service: name=tomcat state=started
+  - name: deploy war file
+    get_url:
+     url=https://tomcat.apache.org/tomcat-7.0-doc/appdev/sample/sample.war
+     dest=/usr/share/tomcat/webapps
+    notify: restart tomcat
   handlers:
-  - name: restart httpd
-    service: name=httpd state=restarted
+   - name: restart tomcat
+     service: name=tomcat state=restarted
+
